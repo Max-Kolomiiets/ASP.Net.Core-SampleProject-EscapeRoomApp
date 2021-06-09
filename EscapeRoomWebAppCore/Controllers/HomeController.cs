@@ -1,5 +1,6 @@
 ﻿using EscapeRoomWebAppCore.Data;
 using EscapeRoomWebAppCore.Models;
+using EscapeRoomWebAppCore.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -18,9 +19,22 @@ namespace EscapeRoomWebAppCore.Controllers
         {
             _db = db;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return View(await _db.EscapeRooms.ToListAsync());
+            int pageSize = 4;
+
+            IQueryable<EscapeRoom> source = _db.EscapeRooms;
+            var count = await source.CountAsync();
+            var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new(count, page, pageSize);
+            IndexViewModel viewModel = new()
+            {
+                PageViewModel = pageViewModel,
+                EscapeRooms = items
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

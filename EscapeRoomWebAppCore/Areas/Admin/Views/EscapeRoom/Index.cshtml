@@ -1,8 +1,33 @@
-﻿@model IEnumerable<EscapeRoomWebAppCore.Models.EscapeRoom>
+﻿@model EscapeRoomWebAppCore.ViewModels.IndexViewModel
 
 @{
     ViewData["Title"] = "Escape Rooms";
 }
+<style>
+    @@font-face {
+        font-family: 'FontAwesome';
+        src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal
+    }
+
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale
+    }
+
+    .glyphicon-chevron-right:before {
+        content: "\f054";
+    }
+
+    .glyphicon-chevron-left:before {
+        content: "\f053";
+    }
+</style>
 
 <h1 class="text-center">Escape rooms</h1>
 
@@ -10,40 +35,40 @@
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
 
-@if (Model?.Count() > 0)
+@if (Model?.EscapeRooms.Count() > 0)
 {
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Name)
+                    Name
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.TimeLimitMinutes)
+                    Time Limit Minutes
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.MinimumPlayerAge)
+                    Minimum Player Age
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Address)
+                    Address
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                    Phone Number
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Rating)
+                    Rating
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FearLevel)
+                    Fear Level
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.DifficultyLevel)
+                    Difficulty Level
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.EscapeRooms)
             {
                 <tr>
                     <td>
@@ -79,7 +104,26 @@
             }
         </tbody>
     </table>
+    @if (Model.PageViewModel.HasPreviousPage)
+    {
+        <a asp-action="Index"
+           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+           class="btn btn-outline-dark">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Back
+        </a>
+    }
+    @if (Model.PageViewModel.HasNextPage)
+    {
+        <a asp-action="Index"
+           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+           class="btn btn-outline-dark">
+            Next
+            <i class="glyphicon glyphicon-chevron-right"></i>
+        </a>
+    }
 }
+
 else
 {
     <p>No Items Found !!!</p>

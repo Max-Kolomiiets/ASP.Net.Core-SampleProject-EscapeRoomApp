@@ -17,6 +17,7 @@ namespace EscapeRoomWebAppCore.Controllers
         }
 
         [HttpGet]
+        [Route("{controller}/{name}")]
         public IActionResult Details(string name)
         {
             return View(_db.EscapeRooms.FirstOrDefault(p=>p.Name==name));
