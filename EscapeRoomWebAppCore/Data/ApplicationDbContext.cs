@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using EscapeRoomWebAppCore.Models;
 using EscapeRoomWebAppCore.Utils;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,12 @@ using System.Threading.Tasks;
 
 namespace EscapeRoomWebAppCore.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+            Database.Migrate();
+        }
         
         public DbSet<EscapeRoom> EscapeRooms { get; set; }
         public DbSet<Photo> Photos { get; set; }

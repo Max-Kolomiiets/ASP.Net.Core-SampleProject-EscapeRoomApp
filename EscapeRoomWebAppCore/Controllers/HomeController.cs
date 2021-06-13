@@ -1,6 +1,7 @@
 ﻿using EscapeRoomWebAppCore.Data;
 using EscapeRoomWebAppCore.Models;
 using EscapeRoomWebAppCore.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -37,6 +38,7 @@ namespace EscapeRoomWebAppCore.Controllers
             return View(viewModel);
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
@@ -47,5 +49,7 @@ namespace EscapeRoomWebAppCore.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        
     }
 }

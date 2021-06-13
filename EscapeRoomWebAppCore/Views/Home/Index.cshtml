@@ -56,24 +56,7 @@
             </div>
         </div>
     }
-    @if (Model.PageViewModel.HasPreviousPage)
-    {
-        <a asp-action="Index"
-           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-           class="btn btn-outline-dark">
-            <i class="glyphicon glyphicon-chevron-left"></i>
-            Back
-        </a>
-    }
-    @if (Model.PageViewModel.HasNextPage)
-    {
-        <a asp-action="Index"
-           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-           class="btn btn-outline-dark">
-            Next
-            <i class="glyphicon glyphicon-chevron-right"></i>
-        </a>
-    }
+    <page-link page-model="Model.PageViewModel" action="Index"></page-link>
 }
 else
 {
