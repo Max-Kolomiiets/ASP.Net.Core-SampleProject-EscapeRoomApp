@@ -33,6 +33,28 @@
     <p>Here you can book escape rooms!</p>
 </div>
 
+<form class="d-flex justify-content-end bd-highlight mb-3" method="get">
+
+    <div class="p-2">
+        <label>Players: </label>
+        <input type="number" name="countPlayers" value="@Model?.FilterViewModel?.MinCountPlayers" class="form-control" min="1" max="30" />
+    </div>
+
+    <div class="p-2">
+        <label>Difficulty Level: </label>
+        <select name="diffLevel" asp-items="Model?.FilterViewModel?.DifficultyLevelList" asp-for="FilterViewModel.DifficultyLevel" class="form-control"></select>
+    </div>
+
+    <div class="p-2">
+        <label>Fear Level: </label>
+        <select name="fearLevel" asp-items="Model?.FilterViewModel?.FearLevelList" asp-for="FilterViewModel.FearLevel" class="form-control"></select>
+    </div>
+
+    <div class="mt-auto p-2">
+        <input type="submit" value="Filter" class="btn btn-outline-success form-control" />
+    </div>
+
+</form>
 @if (Model?.EscapeRooms.Count() > 0)
 {
     @foreach (var room in Model.EscapeRooms)
@@ -56,7 +78,10 @@
             </div>
         </div>
     }
-    <page-link page-model="Model.PageViewModel" action="Index"></page-link>
+    <page-link page-model="Model.PageViewModel" action="Index"
+               page-url-countPlayers="Model?.FilterViewModel?.MinCountPlayers"
+               page-url-diffLevel="Model?.FilterViewModel?.DifficultyLevel"
+               page-url-fearLevel="Model?.FilterViewModel?.FearLevel"></page-link>
 }
 else
 {
