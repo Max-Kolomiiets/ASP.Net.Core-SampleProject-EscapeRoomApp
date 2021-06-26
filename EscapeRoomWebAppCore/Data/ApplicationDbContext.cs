@@ -25,9 +25,9 @@ namespace EscapeRoomWebAppCore.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            FakeData.Init(10);
+            //FakeData.Init(10);
 
-            modelBuilder.Entity<EscapeRoom>().HasData(FakeData.Rooms);
+            //modelBuilder.Entity<EscapeRoom>().HasData(FakeData.Rooms);
         }
     }
 

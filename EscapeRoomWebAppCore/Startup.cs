@@ -41,6 +41,13 @@ namespace EscapeRoomWebAppCore
                 opt.User.RequireUniqueEmail = true;
              
             }).AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthentication()
+                .AddGoogle(opt =>
+                {
+                    opt.ClientId = "37762613558-8jf9ua658akiv4f2tujgi0loh7jl44lm.apps.googleusercontent.com";
+                    opt.ClientSecret = "0ki8BwXulYcgmXIEEjUm4nUc";
+                    opt.SignInScheme = IdentityConstants.ExternalScheme;
+                });
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Identity/Account/Login");
         }
 

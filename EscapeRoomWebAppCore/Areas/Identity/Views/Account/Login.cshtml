@@ -24,3 +24,41 @@
     </div>
 </form>
 
+<div class="col-md-6 col-md-offset-2">
+    <section>
+        <h4>Use another service to log in.</h4>
+        <hr />
+        
+        @*<a  name="logInBtnGoogle" value="Log In using Google Account" class="btn btn-primary" asp-action="google-login" title="Log in using your google account!"/>*@
+        <div>
+            <a class="btn btn-primary" asp-action="GoogleLogin" title="Log in using your google account!">Log in with Google</a>
+        </div>
+        <hr />
+        
+        @*<div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <a href="#" onclick="signOut();">Sign out</a>*@
+    </section>
+</div>
+
+@*@section scripts {
+    <meta name="google-signin-client_id" content="37762613558-8jf9ua658akiv4f2tujgi0loh7jl44lm.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <script>
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+    </script>
+}*@
+

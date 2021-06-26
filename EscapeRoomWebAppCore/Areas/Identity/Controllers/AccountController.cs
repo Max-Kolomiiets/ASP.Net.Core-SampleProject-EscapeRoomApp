@@ -1,10 +1,12 @@
 ﻿using EscapeRoomWebAppCore.Areas.Identity.ViewModels;
 using EscapeRoomWebAppCore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EscapeRoomWebAppCore.Areas.Identity.Controllers
@@ -53,9 +55,9 @@ namespace EscapeRoomWebAppCore.Areas.Identity.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string returnUrl = null)
+        public async Task<IActionResult> Login(string returnUrl = null)
         {
-            return View(new LoginViewModel { ReturnUrl = returnUrl });
+            return View( new LoginViewModel { ReturnUrl = returnUrl, ExternalAuthenticationSchemes = await _signInManager.GetExternalAuthenticationSchemesAsync() });
         }
 
         [HttpPost]
@@ -93,5 +95,58 @@ namespace EscapeRoomWebAppCore.Areas.Identity.Controllers
             await _signInManager.SignOutAsync();
             return Redirect("~/Home/Index");
         }
+
+        // Google Auth
+
+        [AllowAnonymous]
+        [Route("google-login")]
+        public IActionResult GoogleLogin()
+        {
+            var redirectUrl = Url.Action("GoogleResponse");
+            var prop = _signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+            return new ChallengeResult("Google", prop);
+        }
+
+        [AllowAnonymous]
+        [Route("google-response")]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+                return RedirectToAction(nameof(Login));
+
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false); 
+            string[] userInfo = { info.Principal.FindFirst(ClaimTypes.Name).Value, info.Principal.FindFirst(ClaimTypes.Email).Value };
+            if (result.Succeeded)
+                return View(userInfo);
+            else
+            {
+                User user = new User
+                {
+                    Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                    UserName = info.Principal.FindFirst(ClaimTypes.Email).Value
+                };
+
+                IdentityResult identResult = await _userManager.CreateAsync(user);
+                if (identResult.Succeeded)
+                {
+                    identResult = await _userManager.AddLoginAsync(user, info);
+                    if (identResult.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(user, false);
+                        return View(userInfo);
+                    }
+                }
+                return AccessDenied();
+            }
+
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+
     }
 }

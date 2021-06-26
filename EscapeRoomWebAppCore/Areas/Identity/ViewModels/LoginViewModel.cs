@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authentication;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -21,5 +22,7 @@ namespace EscapeRoomWebAppCore.Areas.Identity.ViewModels
         public bool RememberMe { get; set; }
 
         public string ReturnUrl { get; set; }
+
+        public IEnumerable<AuthenticationScheme> ExternalAuthenticationSchemes { get; set; }
     }
 }
